@@ -64,7 +64,6 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
 ## 5. 注意事項
 
 - 設定完後記得重新啟動 Apache 伺服器，讓設定生效。
-- 前端 Flutter build 出來的靜態檔案請放到 `backend/public/`。
 - 後端 PHP API 檔案請放到 `backend/api/`。
 
 ---
