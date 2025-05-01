@@ -14,7 +14,7 @@ se_final_project
 C:/Users/User/se_final_project/
 ├── backend/
 │   ├── api/       # 放置 PHP API 檔案
-│   └── public/    # 放置 Flutter build 出來的靜態網頁 (index.html 等)
+│
 ```
 
 ---
@@ -39,44 +39,31 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
 
 並加入以下內容：
 
-### Flutter 前端設定
-
-```apache
-# Flutter 前端
-<VirtualHost *:8081>
-    ServerName se_final_project.local
-    DocumentRoot "C:/Users/User/se_final_project/backend/public"
-    <Directory "C:/Users/User/se_final_project/backend/public">
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-    DirectoryIndex index.html index.php
-    ErrorLog "logs/se_final_project-error.log"
-    CustomLog "logs/se_final_project-access.log" common
-</VirtualHost>
-```
-
 ### PHP 後端 API 設定
 
 ```apache
 # PHP 後端 API
-Alias /api "C:/Users/User/se_final_project/backend/api"
-<Directory "C:/Users/User/se_final_project/backend/api">
-    Options FollowSymLinks
-    AllowOverride All
-    Require all granted
-</Directory>
+<VirtualHost *:8081>
+    ServerName se_final_project.local
+
+    # 將 /api 對應到實體路徑
+    Alias /api "C:/Users/User/se_final_project/backend/api"
+    <Directory "C:/Users/User/se_final_project/backend/api">
+        Options FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
 ```
 
 ---
 
 ## 4. 修改 Apache 監聽 port
-到 xampp control panel 中點選 Apache 的 config 中的 httpd.conf，到 listen 8080 下面加上 listen 8081
+到 xampp control panel 中點選 Apache 的 config 中的 httpd.conf，到 listen 8080(8080是自已當初設定的port，可能跟我不一樣) 下面加上 listen 8081(8081是api用到的port)
 
 ## 5. 注意事項
 
-- 設定完後記得重新啟動 Apache 伺服器，使設定生效。
+- 設定完後記得重新啟動 Apache 伺服器，讓設定生效。
 - 前端 Flutter build 出來的靜態檔案請放到 `backend/public/`。
 - 後端 PHP API 檔案請放到 `backend/api/`。
 
@@ -86,10 +73,6 @@ Alias /api "C:/Users/User/se_final_project/backend/api"
 - myphpadmin
   ```
   127.0.0.1:8080
-  ```
-- 前端 Flutter 網頁：
-  ```
-  http://se_final_project.local:8081
   ```
 - 後端 API 呼叫範例：
   ```
