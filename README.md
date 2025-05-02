@@ -75,7 +75,7 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
   ```
 - 後端 API 呼叫範例：
   ```
-  http://se_final_project.local:8081/api/你的API.php
+  http://se_final_project_backend.local:8081/api/你的API.php
   ```
 
 ---
