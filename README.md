@@ -2,7 +2,7 @@
 
 ## 1. clone 專案資料夾
 
-請先在路徑 `C:/Users/User(你的使用者名稱)/` 下輸入：
+請先在路徑 `C:/Users/User(你的使用者名稱)/` 打開 cmd 輸入：
 
 ```
 git clone https://github.com/Guanisnt/se_final_project_backend.git
