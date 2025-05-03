@@ -1,17 +1,17 @@
 # 開發環境設定
 
-## 1. 建立專案資料夾
+## 1. clone 專案資料夾
 
-請先在路徑 `C:/Users/User(你的使用者名稱)/` 下建立一個資料夾，命名為：
-
-```
-se_final_project
-```
-
-資料夾結構範例如下：
+請先在路徑 `C:/Users/User(你的使用者名稱)/` 打開 cmd 輸入：
 
 ```
-C:/Users/User/se_final_project/
+git clone https://github.com/Guanisnt/se_final_project_backend.git
+```
+
+請確認資料夾結構範例如下：
+
+```
+C:/Users/User/se_final_project_backend/
 ├── backend/
 │   ├── api/       # 放置 PHP API 檔案
 │
@@ -24,7 +24,7 @@ C:/Users/User/se_final_project/
 用系統管理員身分打開記事本，然後開啟 `C:/Windows/System32/drivers/etc/hosts`，新增以下一行：
 
 ```
-127.0.0.1   se_final_project.local
+127.0.0.1    se_final_project_backend.local
 ```
 
 ---
@@ -44,11 +44,11 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
 ```apache
 # PHP 後端 API
 <VirtualHost *:8081>
-    ServerName se_final_project.local
+    ServerName se_final_project_backend.local
 
     # 將 /api 對應到實體路徑
-    Alias /api "C:/Users/User/se_final_project/backend/api"
-    <Directory "C:/Users/User/se_final_project/backend/api">
+    Alias /api "C:/Users/User/se_final_project_backend/backend/api"
+    <Directory "C:/Users/User/se_final_project_backend/backend/api">
         Options FollowSymLinks
         AllowOverride All
         Require all granted
@@ -75,7 +75,7 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
   ```
 - 後端 API 呼叫範例：
   ```
-  http://se_final_project.local:8081/api/你的API.php
+  http://se_final_project_backend.local:8081/api/你的API.php
   ```
 
 ---
