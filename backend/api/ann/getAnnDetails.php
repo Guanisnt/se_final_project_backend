@@ -32,6 +32,14 @@ if ($conn->connect_error) {
 //         "posterUrls" => [
 //             "http://se_final_project_backend.local:8081/public/posters/poster_1.jpg",
 //             "http://se_final_project_backend.local:8081/public/posters/poster_2.jpg"
+//         ] ,
+//         "fileUrls" => [
+//           "https://yourcdn.com/file/3_1.pdf",
+//           "https://yourcdn.com/file/3_2.doc"
+//         ] ,
+//         "fileNames" => [
+//             "fileName1",
+//             "fileName2"
 //         ]
 //     ]
 // ]);
