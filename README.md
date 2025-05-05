@@ -107,4 +107,7 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
   ?>
   ```
 
+- 開發時前後端都要遵守以下 API 文件的內容，特別是 request 和 response，json 的 key 命名也一定要完全一樣
+  https://docs.google.com/document/d/12qIWhQzDpjkNNAPXB3dxa3b5BNx9iYlK4jR_2Gtfeuo/edit?usp=sharing
+
 ---
