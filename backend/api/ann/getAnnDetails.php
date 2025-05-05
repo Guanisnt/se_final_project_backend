@@ -30,11 +30,22 @@ if ($conn->connect_error) {
 //         "content" => "系統將於凌晨 2 點進行例行維護，屆時將暫停服務。",
 //         "time" => "2025-05-01",
 //         "posterUrls" => [
-//             "http://se_final_project_backend.local:8081/public/posters/poster_1.jpg",
-//             "http://se_final_project_backend.local:8081/public/posters/poster_2.jpg"
+//             "posters/poster_1.jpg",
+//             "posters/poster_2.jpg"
+//         ],
+//         "files" => [
+//             [
+//                 "url" => "https://yourcdn.com/file/3_1.pdf",
+//                 "name" => "fileName1"
+//             ],
+//             [
+//                 "url" => "https://yourcdn.com/file/3_2.doc",
+//                 "name" => "fileName2"
+//             ]
 //         ]
 //     ]
-// ]);
+// ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
 
 /* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
 
