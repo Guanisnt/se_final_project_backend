@@ -79,3 +79,32 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
   ```
 
 ---
+
+## 7. 其他事項
+在開發過程中如果要測試請確認以下事項都已完成
+- 在後端這個路徑/backend/api/下新增db_connect.php，內容如下，帳號密碼換成自己資料庫的，最後到.gitignore這個檔案裡面看有沒有這一行/backend/api/db_connect.php
+  ```
+  <?php
+  $host = 'localhost';
+  $user = 'root';
+  $password = '12345678'; // 如有密碼請填寫
+  $dbname = 'se_final_project'; // 改成實際資料庫名稱
+
+  //http://se_final_project_backend.local:8081/api/檔名.php 網站連線測試
+
+  // 建立連線
+  mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); // 讓資料庫錯誤會拋出 Exception
+
+  $conn = mysqli_connect($host, $user, $password, $dbname);
+  // 檢查連線
+  if (!$conn) {
+      #echo "資料庫連線失敗: " . mysqli_connect_error();
+      die("資料庫連線失敗: " . mysqli_connect_error());
+  }
+  else{
+      #echo "資料庫連線成功";
+  } 
+  ?>
+  ```
+
+---
