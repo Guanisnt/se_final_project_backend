@@ -11,5 +11,10 @@ if ($conn->connect_error) {
     exit;
 }
 
+// echo json_encode([
+//     "success" => true,
+//     "userType" => "學生"
+// ]);
+
 $conn->close();
 ?>
