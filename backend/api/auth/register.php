@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     exit;
 }
 
-$uid= $input["id"];
+$uId= $input["id"];
 $password= $input["password"];
 $name= $input["name"];
 $sexual= $input["sexual"];
@@ -27,13 +27,13 @@ $conn->begin_transaction(); // 顯式開始交易
 
 try {
     // 插入 users 表
-    $stmt_user = $conn->prepare("INSERT INTO users (uid, name, email, password, sexual, phone, userType) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt_user->bind_param("sssssss", $uid, $name, $email, $password, $sexual, $phone, $userType);
+    $stmt_user = $conn->prepare("INSERT INTO users (uId, name, email, password, sexual, phone, userType) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt_user->bind_param("sssssss", $uId, $name, $email, $password, $sexual, $phone, $userType);
     $stmt_user->execute();
 
     // 插入 student 表
-    $stmt_student = $conn->prepare("INSERT INTO student (department, grade, uid) VALUES (?, ?, ?)");
-    $stmt_student->bind_param("sss", $department, $grade, $uid);
+    $stmt_student = $conn->prepare("INSERT INTO student (department, grade, uId) VALUES (?, ?, ?)");
+    $stmt_student->bind_param("sss", $department, $grade, $uId);
     $stmt_student->execute();
 
     // 提交交易

@@ -11,12 +11,12 @@ if ($conn->connect_error) {
     exit;
 }
 
-$uid= $input["id"];
+$uId= $input["id"];
 $password= $input["password"];
 
-$sql = "SELECT password FROM users WHERE uid = ?";
+$sql = "SELECT password FROM users WHERE uId = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $uid);
+$stmt->bind_param("s", $uId);
 $stmt->execute();
 $result = $stmt->get_result();
 
