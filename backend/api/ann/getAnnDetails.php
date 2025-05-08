@@ -49,5 +49,71 @@ if ($conn->connect_error) {
 
 /* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
 
+if (isset($_GET['aId'])) {
+    $aId = intval($_GET['aId']);
+
+    // 查詢公告主資料
+    $stmt_ann = $conn->prepare("SELECT aId, title, content, time FROM ann WHERE aId = ?");
+    $stmt_ann->bind_param("i", $aId);
+    $stmt_ann->execute();
+    $result_ann = $stmt_ann->get_result();
+
+    if ($result_ann->num_rows === 0) {
+        echo json_encode([
+            "success" => false,
+            "error" => "找不到此公告，檢查aId"
+        ]);
+        exit;
+    }
+
+    $ann_data = $result_ann->fetch_assoc();
+    $stmt_ann->close();
+
+    // 查詢檔案資料
+    $stmt_file = $conn->prepare("SELECT fileUrl, fileName FROM file WHERE aId = ?");
+    $stmt_file->bind_param("i", $aId);
+    $stmt_file->execute();
+    $result_file = $stmt_file->get_result();
+
+    $files = [];
+    while ($row = $result_file->fetch_assoc()) {
+        $files[] = [
+            "url" => $row['fileUrl'],
+            "name" => $row['fileName']
+        ];
+    }
+    $stmt_file->close();
+
+    // 查詢 posterUrl
+    $stmt_posters = $conn->prepare("SELECT posterUrl FROM ann_posterurl WHERE aId = ?");
+    $stmt_posters->bind_param("i", $aId);
+    $stmt_posters->execute();
+    $result_posters = $stmt_posters->get_result();
+
+    $posterUrls = [];
+    while ($row = $result_posters->fetch_assoc()) {
+        $posterUrls[] = $row['posterUrl'];
+    }
+    $stmt_posters->close();
+
+    // 輸出 JSON 結果
+    echo json_encode([
+        "success" => true,
+        "data" => [
+            "aId" => $ann_data['aId'],
+            "title" => $ann_data['title'],
+            "content" => $ann_data['content'],
+            "time" => $ann_data['time'],
+            "posterUrls" => $posterUrls,
+            "files" => $files
+        ]
+    ]);
+} else {
+    echo json_encode([
+        "success" => false,
+        "error" => "缺少aId參數"
+    ]);
+}
+
 $conn->close();
 ?>

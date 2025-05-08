@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-require_once 'db_connect.php'; // 載入連線設定 $conn
+require_once 'db_connect.php'; // 載入資料庫連線設定 $conn
 
 $sql = "SELECT * FROM users WHERE uid = ?";
 $stmt = mysqli_prepare($conn, $sql); // 預備 SQL 語句
