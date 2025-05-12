@@ -13,8 +13,17 @@ if ($conn->connect_error) {
 
 // echo json_encode([
 //     "success" => true,
-//     "userType" => "學生"
+//     "userType" => "attendee",
 // ]);
+
+// echo json_encode([
+//     "success" => true,
+//     "data" => [
+//         "userType" => "attendee",
+//     ]
+// ]);
+
+/* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
 
 $uId= $input["id"];
 $password= $input["password"];
