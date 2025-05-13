@@ -1,5 +1,5 @@
 <?php
-$targetDir = "uploads/studentCards/";
+$targetDir = "../uploadImage/studentCards/";
 if (!file_exists($targetDir)) {
     mkdir($targetDir, 0777, true);
 }
@@ -9,12 +9,14 @@ if (isset($_FILES["file"])) {
     $targetFilePath = $targetDir . uniqid() . "_" . $fileName;
 
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)) {
-        // 回傳圖片 URL
-        $imageUrl = "https://yourdomain.com/" . $targetFilePath;
-        echo json_encode(["success" => true, "url" => $imageUrl]);
+        $imageUrl = "http://se_final_project_backend.local:8081/api" . str_replace("../", "/", $targetFilePath);
+        echo json_encode([
+            "success" => true, 
+            "imgUrl" => $imageUrl
+        ]);
     } else {
-        echo json_encode(["success" => false, "message" => "Upload failed."]);
+        echo json_encode(["success" => false, "error" => "Upload failed."]);
     }
 } else {
-    echo json_encode(["success" => false, "message" => "No file uploaded."]);
+    echo json_encode(["success" => false, "error" => "No file uploaded."]);
 }
