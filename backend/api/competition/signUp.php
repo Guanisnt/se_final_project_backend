@@ -39,10 +39,5 @@ echo json_encode([
     "advisor" => $advisor
 ]);
 
-// === 可以開始做資料庫插入等處理 ===
-// 例如：
-// 1. 插入 team 資料
-// 2. 插入每一個 teamMember
-// 3. 插入 advisor 資料
-// 4. 存學生證圖片的 URL
+/* === 從這邊以下開始寫資料庫操作 === */
 ?>
