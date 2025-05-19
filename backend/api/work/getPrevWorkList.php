@@ -32,6 +32,18 @@ echo json_encode([
 ]);
 
 /* === 從這邊以下開始寫資料庫操作 === */
+$sql = "SELECT workId, teamRank, teamName, workName, advisor FROM PrevWorkList";
+$result = $conn->query($sql);
 
+$data = [];
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+    echo json_encode(["success" => true, "data" => $data], JSON_UNESCAPED_UNICODE);
+} else {
+    echo json_encode(["success" => true, "data" => []]);  
+}
 $conn->close();
 ?>
