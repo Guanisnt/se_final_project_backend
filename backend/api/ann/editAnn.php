@@ -19,5 +19,5 @@ echo json_encode([
     // "annContent" => $input['annContent'],
     // "uId" => $input['uId'],
 ]);
-
+/* === 從這邊以下開始寫資料庫操作 === */
 ?>

@@ -15,5 +15,6 @@ echo json_encode([
     "success" => true,
     "aId" => "回傳新增的公告的aId(因為後續新增poster或是file會用到)",
 ])
+/* === 從這邊以下開始寫資料庫操作 === */
 
 ?>
