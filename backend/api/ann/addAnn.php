@@ -13,6 +13,7 @@ if ($conn->connect_error) {
 
 echo json_encode([
     "success" => true,
+    "aId" => "回傳新增的公告的aId(因為後續新增poster或是file會用到)",
 ])
 
 ?>
