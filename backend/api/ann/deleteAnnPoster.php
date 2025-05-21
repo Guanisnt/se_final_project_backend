@@ -15,8 +15,8 @@ $posterUrl= isset($_GET['posterUrl']) ? $_GET['posterUrl'] : null;
 
 echo json_encode([
     "success" => true,
-    "aId" => $aId,
-    "posterUrl" => $posterUrl,
+    // "aId" => $aId,
+    // "posterUrl" => $posterUrl,
 ]);
 /* === 從這邊以下開始寫資料庫操作 === */
 ?>
