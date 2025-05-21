@@ -1,5 +1,5 @@
 <?php
-$targetDir = "../uploadImage/annPosters/";
+$targetDir = "../uploadFiles/annFiles/";
 if (!file_exists($targetDir)) {
     mkdir($targetDir, 0777, true);
 }
