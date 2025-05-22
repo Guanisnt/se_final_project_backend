@@ -22,7 +22,6 @@ $workAbstract = $input["workAbstract"];
 $workUrls = $input["workUrls"]; // array
 $sdgs = $input["sdgs"];         // 建議改成 array
 $numberOfMember = $input["numberOfMember"];
-
 $teamMembers = $input["teamMembers"]; // array of members
 $advisor = $input["advisor"];         // object
 
@@ -36,7 +35,7 @@ echo json_encode([
     "sdgs" => $sdgs,
     "memberCount" => $numberOfMember,
     "members" => $teamMembers,
-    "advisor" => $advisor
+    "advisor" => $advisor,
 ]);
 
 /* === 從這邊以下開始寫資料庫操作 === */
