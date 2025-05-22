@@ -23,7 +23,7 @@ if (!$wId) {
 // 模擬回傳一筆公告資料
 echo json_encode([
     "success" => true,
-    "workshopId" => ["workshopId1", "workshopId2", "workshopId3"],
+    "workshopId" => [1, 2, 3],
 ]);
 
 
