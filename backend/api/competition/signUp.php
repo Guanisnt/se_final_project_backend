@@ -13,29 +13,34 @@ if ($conn->connect_error) {
     exit;
 }
 
-// === 解構 JSON ===
-
-$teamName = $input["teamName"];
-$teamType = $input["teamType"];
-$workName = $input["workName"];
-$workAbstract = $input["workAbstract"];
-$workUrls = $input["workUrls"]; // array
-$sdgs = $input["sdgs"];         // 建議改成 array
-$numberOfMember = $input["numberOfMember"];
-$teamMembers = $input["teamMembers"]; // array of members
-$advisor = $input["advisor"];         // object
-
-// === Debug 輸出 (可用 Postman 測試用) ===
 echo json_encode([
     "success" => true,
-    "teamName" => $teamName,
-    "teamType" => $teamType,
-    "workName" => $workName,
-    "workUrls" => $workUrls,
-    "sdgs" => $sdgs,
-    "memberCount" => $numberOfMember,
-    "members" => $teamMembers,
-    "advisor" => $advisor,
+    // "members" => [
+    //     [
+    //         "name" => "這是隊員一名字",
+    //         "stuId" => "這是學號",
+    //         "department" => "資工系",
+    //         "grade" => "大三",
+    //         "email" => "hihihi@gmail",
+    //         "phone" => "091212121212",
+    //         "studentCard" => "學生證存在後端的URL",
+    //         "sexual" => "男"
+    //     ],
+    //     [
+    //         "name" => "這是隊員二名字",
+    //         "stuId" => "這是學號",
+    //         "department" => "資工系",
+    //         "grade" => "大三",
+    //         "email" => "hihihi@gmail",
+    //         "phone" => "091212121212",
+    //         "sexual" => "女"
+    //     ]
+    // ],
+    // "advisor" => [
+    //     "teacherName" => "指導教授姓名",
+    //     "title" => "職稱",
+    //     "organization" => "高雄大學"
+    // ]
 ]);
 
 /* === 從這邊以下開始寫資料庫操作 === */
