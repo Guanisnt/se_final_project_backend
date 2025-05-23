@@ -16,12 +16,35 @@ $uId = isset($_GET['uId']) ? $_GET['uId'] : null;
 // 模擬回傳一筆公告資料
 echo json_encode([
     "success" => true,
+    "uId" => $uId,
     "name" => "陳小明",
     "email" => "a1115526@gmail.com",
     "phone" => "0912345678",
     "sexual" => "男",
-    "password" => "12345678",
-    // "uId" => $uId,
+    "judgeInfo" => [
+        "userType" => "judge",
+        "title" => "中壢來的不中立評審",
+    ],
+    "teacherInfo" => [
+        "userType" => "teacher",
+        "department" => "資訊工程學系",
+        "organization" => "高雄大學",
+        "title" => "高大尚",
+    ],
+    "studentInfo" => [
+        "userType" => "student",
+        "department" => "資訊工程學系",
+        "grade" => "大五",
+    ],
+    "lectureInfo" => [
+        "userType" => "lecture",
+        "title" => "講幹話大師",
+    ],
+    "attendeeInfo" => [
+        "studentCard" => "回傳學生證圖片路徑",
+        "teamId" => "回傳隊伍ID",
+        "workId" => "回傳作品ID",
+    ],
 ]);
 
 
