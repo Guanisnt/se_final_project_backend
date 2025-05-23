@@ -46,7 +46,6 @@ $result = $stmt->get_result();
 
 $data = []; // 用來存放查詢公告資訊結果的陣列
 while ($row = $result->fetch_assoc()) {
-    #$row['aId'] = strval($row['aId']); // 將 aId 轉為字串
     $data[] = $row;
 }
 
