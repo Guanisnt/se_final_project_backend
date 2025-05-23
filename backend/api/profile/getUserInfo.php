@@ -21,23 +21,20 @@ echo json_encode([
     "email" => "a1115526@gmail.com",
     "phone" => "0912345678",
     "sexual" => "男",
+    "userType" => "依照uId回傳的使用者類型",
     "judgeInfo" => [
-        "userType" => "judge",
         "title" => "中壢來的不中立評審",
     ],
     "teacherInfo" => [
-        "userType" => "teacher",
         "department" => "資訊工程學系",
         "organization" => "高雄大學",
         "title" => "高大尚",
     ],
     "studentInfo" => [
-        "userType" => "student",
         "department" => "資訊工程學系",
         "grade" => "大五",
     ],
     "lectureInfo" => [
-        "userType" => "lecture",
         "title" => "講幹話大師",
     ],
     "attendeeInfo" => [
