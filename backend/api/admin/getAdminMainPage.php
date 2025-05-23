@@ -17,37 +17,17 @@ echo json_encode([
     "userManage" => [
         "totalUser" => 1900,
         "stuAmount" => 1100,
+        "attendeeAmount" => 200,
         "techerAmount" => 500,
         "lecturerAmount" => 100,
         "judgeAmount" => 200,
     ],
-    "annManage" => [
-        [
-            "annTitle" => "公告１",
-            "publishDate" => "2025-05-01",
-        ],
-        [
-            "annTitle" => "公告2",
-            "publishDate" => "2025-05-01",
-        ],
-        [
-            "annTitle" => "公告3",
-            "publishDate" => "2025-05-01",
-        ],
-    ],
-    "workshopManage" => [
-        [
-            "workshopTopic" => "工作坊1",
-            "workshopDate" => "2025-05-01",
-        ],
-        [
-            "workshopTopic" => "工作坊2",
-            "workshopDate" => "2025-05-01",
-        ],
-        [
-            "workshopTopic" => "工作坊3",
-            "workshopDate" => "2025-05-01",
-        ],
+    "workState" => [
+        "totalTeam" => 1900,
+        "accepted" => 1100,
+        "pending" => 120,
+        "supplementary" => 500,
+        "notUploadYet" => 80,
     ]
 ]);
 
