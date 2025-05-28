@@ -1,4 +1,9 @@
 <?php
+require_once '../db_connect.php';
+
+$stmt = $conn->prepare("UPDATE attendee SET studentCard = ? WHERE uId = ?");
+$stmt->bind_param("ss", $imageUrl, $uId);
+
 $targetDir = "../uploadImage/studentCards/";
 if (!file_exists($targetDir)) {
     mkdir($targetDir, 0777, true);
@@ -12,11 +17,15 @@ if (isset($_FILES["file"])) {
 
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)) {
         $imageUrl = "http://se_final_project_backend.local:8081/api" . str_replace("../", "/", $targetFilePath);
-        echo json_encode([
-            "success" => true,
-            "uId" => $uId,
-            "imgUrl" => $imageUrl
-        ]);
+        if ($stmt->execute()) {
+            echo json_encode([
+                "success" => true,
+                "uId" => $uId,
+                "imgUrl" => $imageUrl
+            ]);
+        } else {
+            echo json_encode(["success" => false, "error" => "資料庫寫入失敗：" . $stmt->error]);
+        }
     } else {
         echo json_encode(["success" => false, "error" => "Upload failed."]);
     }
@@ -25,3 +34,7 @@ if (isset($_FILES["file"])) {
 }
 
 /* === 從這邊以下開始寫資料庫操作 === */
+
+
+$stmt->close();
+$conn->close();
