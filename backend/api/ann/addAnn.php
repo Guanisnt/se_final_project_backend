@@ -11,10 +11,33 @@ if ($conn->connect_error) {
     exit;
 } 
 
-echo json_encode([
-    "success" => true,
-    "aId" => "回傳新增的公告的aId(因為後續新增poster或是file會用到)",
-])
+// echo json_encode([
+//     "success" => true,
+//     "aId" => "回傳新增的公告的aId(因為後續新增poster或是file會用到)",
+// ])
 /* === 從這邊以下開始寫資料庫操作 === */
 
+// 檢查必要欄位
+if (!isset($input['annTitle'], $input['annContent'], $input['publishDate'], $input['uId'])) {
+    echo json_encode(["success" => false, "error" => "缺少必要欄位"]);
+    exit;
+}
+
+$annTitle = $input['annTitle'];
+$annContent = $input['annContent'];
+$publishDate = $input['publishDate'];
+$uId = $input['uId'];
+
+// 插入資料（不含 aId）
+$insertSql = "INSERT INTO ann (title, content, time, uId) VALUES (?, ?, ?, ?)";
+$stmt = $conn->prepare($insertSql);
+$stmt->bind_param("ssss", $annTitle, $annContent, $publishDate, $uId);
+
+if ($stmt->execute()) {
+    $newAnnId = $conn->insert_id; // 取得自動產生的 aId
+    echo json_encode(["success" => true, "aId" => $newAnnId]);
+} else {
+    echo json_encode(["success" => false, "error" => "新增公告失敗"]);
+}
+?>
 ?>
