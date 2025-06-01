@@ -57,29 +57,23 @@ JOIN
 
 $result = $conn->query($sql);
 
-if ($result && $result->num_rows > 0) {
-    $data = [];
-    while ($row = $result->fetch_assoc()) { //fetch_assoc() 可能會自動轉型成字串
-        $data[] = [
-            "wsId" => (int) $row["wsId"],
-            "topic" => $row["topic"],
-            "date" => $row["date"],
-            "maxAmount" => (int) $row["maxAmount"],
-            "currentAmount" => (int) $row["currentAmount"],
-            "lecturerName" => $row["lecturerName"],
-            "lecturerTitle" => $row["lecturerTitle"],
-        ];
-    }
-    echo json_encode([
-        "success" => true,
-        "data" => $data
-    ]);
-} else {
-    echo json_encode([
-        "success" => false,
-        "error" => "查無資料"
-    ]);
+$data = [];
+while ($row = $result->fetch_assoc()) { //fetch_assoc() 可能會自動轉型成字串
+    $data[] = [
+        "wsId" => (int) $row["wsId"],
+        "topic" => $row["topic"],
+        "date" => $row["date"],
+        "maxAmount" => (int) $row["maxAmount"],
+        "currentAmount" => (int) $row["currentAmount"],
+        "lecturerName" => $row["lecturerName"],
+        "lecturerTitle" => $row["lecturerTitle"],
+    ];
 }
+echo json_encode([
+    "success" => true,
+    "data" => $data
+]);
+
 
 $conn->close();
 ?>
