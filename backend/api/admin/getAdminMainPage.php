@@ -27,7 +27,6 @@ echo json_encode([
         "accepted" => 1100,
         "pending" => 120,
         "supplementary" => 500,
-        "notUploadYet" => 80,
     ]
 ]);
 
