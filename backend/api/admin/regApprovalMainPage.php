@@ -11,7 +11,6 @@ if ($conn->connect_error) {
     exit;
 } 
 
-// 模擬回傳一筆公告資料
 echo json_encode([
     "success" => true,
     "page" => 1,
@@ -20,17 +19,13 @@ echo json_encode([
         [
             "teamId" => "2025team123",
             "teamName" => "對對隊",
-            "workIntroduction" => "作品說明書檔案路徑",
-            "workConsent" => "個資同意書檔案路徑",
-            "workAffidavit" => "提案切結書檔案路徑",
+            "workName" => "作品名稱",
             "state" => "已審核"
         ],
         [
             "teamId" => "2025team321",
             "teamName" => "不太隊",
-            "workIntroduction" => "",
-            "workConsent" => "個資同意書檔案路徑",
-            "workAffidavit" => "",
+            "workName" => "作品名稱",
             "state" => "需補件"
         ]
     ],
