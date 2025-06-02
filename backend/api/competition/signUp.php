@@ -113,7 +113,7 @@ try {
     }
 
     // 插入 work
-    $workState = "待上傳";
+    $workState = "待審核";
     $insertWorkSql = "INSERT INTO work (wId, name, sdgs, state, abstract, tId) VALUES (?, ?, ?, ?, ?, ?)";
     $insertWorkStmt = $conn->prepare($insertWorkSql);
     $insertWorkStmt->bind_param("ssssss", $newWorkId, $workName, $sdgs, $workState, $workAbstract, $newTeamId);

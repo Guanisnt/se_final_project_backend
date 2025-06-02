@@ -13,15 +13,30 @@ if ($conn->connect_error) {
 
 $uId = isset($_GET['uId']) ? $_GET['uId'] : null;
 
-// 模擬回傳一筆公告資料
-echo json_encode([
-    "success" => true,
-    "name" => "陳小明",
-    // "uId" => $uId,
-]);
+if (!$uId) {
+    echo json_encode(["success" => false, "error" => "缺少 uId 參數"]);
+    exit;
+}
 
+// 根據 uId 查詢對應使用者
+$sql = "SELECT name FROM users WHERE uId = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $uId);
+$stmt->execute();
+$result = $stmt->get_result();
 
-/* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
+if ($row = $result->fetch_assoc()) {
+    echo json_encode([
+        "success" => true,
+        "name" => $row['name']
+    ]);
+} else {
+    echo json_encode([
+        "success" => false,
+        "error" => "查無使用者"
+    ]);
+}
 
+$stmt->close();
 $conn->close();
 ?>
