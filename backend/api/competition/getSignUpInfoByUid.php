@@ -30,33 +30,155 @@ echo json_encode([
         "workConsent" => "個資同意書檔案路徑",
         "workAffidavit" => "提案切結書檔案路徑",
     ],
-    "advisorInfo" => [
+    "teacherInfo" => [
         "name" => "陳老師",
         "title" => "指導老師",
         "department" => "資訊工程系",
         "organization" => "高雄大學",
     ],
-    "memberInfo" => [
+    "userInfo" => [
         [
             "uId" => "a1115555",
             "name" => "陳小明",
-            "department" => "資訊工程系",
-            "grade" => "大一",
             "email" => "a1115555@gmail.com",
             "phone" => "0912345678",
-            "studentCard" => "student_card_path_1.jpg"
         ],
         [
             "uId" => "a1115566",
             "name" => "張三",
-            "department" => "資訊工程系",
-            "grade" => "大一",
             "email" => "a1115566@gmail.com",
             "phone" => "0912345678",
-            "studentCard" => "student_card_path_2.jpg"
         ],
     ],
+    "studentInfo" => [
+        [
+            "department" => "資訊工程系",
+            "grade" => "大一",
+        ],
+        [
+            "department" => "資訊工程系",
+            "grade" => "大二",
+        ],
+    ],
+    "attendeeInfo" => [
+        [
+            "studentCard" => "student_card_path_1.jpg",
+            "teamId" => "2025team123",
+            "workId" => "2025work456",
+        ],
+        [
+            "studentCard" => "student_card_path_2.jpg",
+            "teamId" => "2025team123",
+            "workId" => "2025work456",
+        ],
+    ]
 ]);
+
+// echo json_encode([
+//     "success" => true,
+//     "teamInfo" => [
+//         "workSate" => "待上傳",
+//         "teamName" => "對對隊",
+//         "teamType" => "創意發想組",
+//         "workName" => "作品名稱",
+//         "workAbstract" => "作品摘要",
+//         "workUrls" => [
+//             "https://example.com/work1",
+//             "https://example.com/work2"
+//         ],
+//         "sdgs" => "1, 2",
+//         "workIntroduction" => "作品說明書檔案路徑",
+//         "workConsent" => "個資同意書檔案路徑",
+//         "workAffidavit" => "提案切結書檔案路徑",
+//     ],
+//     "teacherInfo" => [
+//         "name" => "陳老師",
+//         "title" => "指導老師",
+//         "department" => "資訊工程系",
+//         "organization" => "高雄大學",
+//     ],
+//     "userInfo" => [
+//         [
+//             "uId" => "a1115555",
+//             "name" => "陳小明",
+//             "email" => "a1115555@gmail.com",
+//             "phone" => "0912345678",
+//         ],
+//         [
+//             "uId" => "a1115566",
+//             "name" => "張三",
+//             "email" => "a1115566@gmail.com",
+//             "phone" => "0912345678",
+//         ],
+//     ],
+//     "studentInfo" => [
+//         [
+//             "department" => "資訊工程系",
+//             "grade" => "大一",
+//         ],
+//         [
+//             "department" => "資訊工程系",
+//             "grade" => "大二",
+//         ],
+//     ],
+//     "attendeeInfo" => [
+//         [
+//             "studentCard" => "student_card_path_1.jpg",
+//             "teamId" => "2025team123",
+//             "workId" => "2025work456",
+//         ],
+//         [
+//             "studentCard" => "student_card_path_2.jpg",
+//             "teamId" => "2025team123",
+//             "workId" => "2025work456",
+//         ],
+//     ]
+// ]);
+
+// echo json_encode([
+//     "success" => true,
+//     "teamInfo" => [
+//         "workSate" => "待上傳",
+//         "teamName" => "對對隊",
+//         "teamType" => "創意發想組",
+//         "workName" => "作品名稱",
+//         "workAbstract" => "作品摘要",
+//         "workUrls" => [
+//             "https://example.com/work1",
+//             "https://example.com/work2"
+//         ],
+//         "sdgs" => "1, 2",
+//         "workIntroduction" => "作品說明書檔案路徑",
+//         "workConsent" => "個資同意書檔案路徑",
+//         "workAffidavit" => "提案切結書檔案路徑",
+//     ],
+//     "teacherInfo" => [
+//         "name" => "陳老師",
+//         "title" => "指導老師",
+//         "department" => "資訊工程系",
+//         "organization" => "高雄大學",
+//     ],
+//     "memberInfo" => [
+//         [
+//             "uId" => "a1115555",
+//             "name" => "陳小明",
+//             "department" => "資訊工程系",
+//             "grade" => "大一",
+//             "email" => "a1115555@gmail.com",
+//             "phone" => "0912345678",
+//             "studentCard" => "student_card_path_1.jpg"
+//         ],
+//         [
+//             "uId" => "a1115566",
+//             "name" => "張三",
+//             "department" => "資訊工程系",
+//             "grade" => "大一",
+//             "email" => "a1115566@gmail.com",
+//             "phone" => "0912345678",
+//             "studentCard" => "student_card_path_2.jpg"
+//         ],
+//     ],
+// ]);
 
 
 /* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
