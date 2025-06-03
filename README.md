@@ -53,6 +53,15 @@ C:/xampp/apache/conf/extra/httpd-vhosts.conf
         AllowOverride All
         Require all granted
     </Directory>
+
+    <IfModule mod_headers.c>
+            # 對所有副檔名為 png, jpg, gif, svg 等靜態影像，加上 CORS
+            <FilesMatch "\.(png|jpe?g|gif|svg)$">
+                Header set Access-Control-Allow-Origin "*"
+                Header set Access-Control-Allow-Methods "GET, OPTIONS"
+                Header set Access-Control-Allow-Headers "Content-Type"
+            </FilesMatch>
+    </IfModule>
 </VirtualHost>
 ```
 
