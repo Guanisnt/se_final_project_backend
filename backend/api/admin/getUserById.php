@@ -13,11 +13,10 @@ if ($conn->connect_error) {
 
 $uId = isset($_GET['uId']) ? $_GET['uId'] : null;
 
-// 模擬回傳一筆公告資料
 echo json_encode([
     "success" => true,
     "name" => "陳小明",
-    // "uId" => $uId,
+    "uId" => $uId,
 ]);
 
 
