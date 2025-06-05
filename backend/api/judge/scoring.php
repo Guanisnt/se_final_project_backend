@@ -12,11 +12,15 @@ if ($conn->connect_error) {
 } 
 
 $score = isset($input['score']) ? $input['score'] : null;
+$workId = isset($input['workId']) ? $input['workId'] : null;
+$judgeId = isset($input['judgeId']) ? $input['judgeId'] : null;
 
 // 模擬回傳一筆公告資料
 echo json_encode([
     "success" => true,
     "score" => $score,
+    "workId" => $workId,
+    "judgeId" => $judgeId,
 ]);
 
 
