@@ -28,7 +28,8 @@ $result = $stmt->get_result();
 if ($row = $result->fetch_assoc()) {
     echo json_encode([
         "success" => true,
-        "name" => $row['name']
+        "name" => $row['name'],
+        "uId" => $uId
     ]);
 } else {
     echo json_encode([

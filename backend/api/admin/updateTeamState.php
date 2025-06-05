@@ -12,9 +12,29 @@ if ($conn->connect_error) {
     exit;
 }
 
-echo json_encode([
-    "success" => true,
-]);
+$teamId = $input['teamId'] ?? null;
+$state = $input['state'] ?? null;
 
-/* === 從這邊以下開始寫資料庫操作 === */
+if (!$teamId || !$state) {
+    echo json_encode([
+        "success" => false,
+        "error" => "缺少必要參數"
+    ]);
+    exit;
+}
+$sql = "UPDATE work SET state = ? WHERE tId = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $state, $teamId);
+
+if ($stmt->execute()) {
+    echo json_encode(["success" => true]);
+} else {
+    echo json_encode([
+        "success" => false,
+        "error" => "更新失敗"
+    ]);
+}
+
+$stmt->close();
+$conn->close();
 ?>
