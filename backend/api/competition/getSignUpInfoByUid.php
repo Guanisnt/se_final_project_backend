@@ -32,30 +32,44 @@ echo json_encode([
     ],
     "advisorInfo" => [
         "name" => "陳老師",
-        "title" => "指導老師",
-        "department" => "資訊工程系",
-        "organization" => "高雄大學",
+        "teacherInfo" => [
+            "title" => "指導老師",
+            "department" => "資訊工程系",
+            "organization" => "高雄大學",
+        ]
     ],
     "memberInfo" => [
         [
             "uId" => "a1115555",
             "name" => "陳小明",
-            "department" => "資訊工程系",
-            "grade" => "大一",
             "email" => "a1115555@gmail.com",
             "phone" => "0912345678",
-            "studentCard" => "student_card_path_1.jpg"
+            "studentInfo" => [
+                "department" => "資訊工程系",
+                "grade" => "大一"
+            ],
+            "attendeeInfo" => [
+                "studentCard" => "student_card_path_1.jpg",
+                "teamId" => "2025team123",
+                "workId" => "2025work456"
+            ]
         ],
         [
             "uId" => "a1115566",
             "name" => "張三",
-            "department" => "資訊工程系",
-            "grade" => "大一",
             "email" => "a1115566@gmail.com",
             "phone" => "0912345678",
-            "studentCard" => "student_card_path_2.jpg"
+            "studentInfo" => [
+                "department" => "資訊工程系",
+                "grade" => "大三"
+            ],
+            "attendeeInfo" => [
+                "studentCard" => "student_card_path_2.jpg",
+                "teamId" => "2025team123",
+                "workId" => "2025work456"
+            ]
         ],
-    ],
+    ]
 ]);
 
 
