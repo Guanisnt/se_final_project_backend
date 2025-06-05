@@ -24,12 +24,14 @@ echo json_encode([
             "teamName" => "對對隊",
             "workName" => "作品名稱",
             "teamId" => "2025team1",
+            "workId" => "2025work1",
         ],
         [
             "teamType" => "創意發想組",
             "teamName" => "創意隊",
             "workName" => "創意作品",
             "teamId" => "2025team2",
+            "workId" => "2025work2",
         ],
     ],
 ]);
