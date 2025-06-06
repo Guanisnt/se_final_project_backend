@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     exit;
 } 
 
-$page = isset($_GET['page']) ? $_GET['page'] : null;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
 $offset = ($page - 1) * $limit;
 
