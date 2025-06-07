@@ -9,7 +9,7 @@ require_once '../db_connect.php';
 if ($conn->connect_error) {
     echo json_encode(["success" => false, "error" => "資料庫連線失敗"]);
     exit;
-} 
+}  
 
 if (!isset($input['score'], $input['judgeId'], $input['workId'])) {
     echo json_encode(["success" => false, "error" => "缺少必要欄位"]);

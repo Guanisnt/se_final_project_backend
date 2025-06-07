@@ -12,6 +12,7 @@ if ($conn->connect_error) {
 } 
 
 $uId = isset($_GET['uId']) ? $_GET['uId'] : null;
+$teamId = isset($_GET['teamId']) ? $_GET['teamId'] : null;
 
 echo json_encode([
     "success" => true,
