@@ -11,29 +11,31 @@ if ($conn->connect_error) {
     exit;
 } 
 
-$page = isset($_GET['page']) ? $_GET['page'] : null;
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 
-// 模擬回傳一筆公告資料
 echo json_encode([
     "success" => true,
     "page" => 1,
     "totalPage" => 10,
     "data" => [
         [
+            "attendYear" => 2025,
             "teamType" => "創意發想組",
+            "teamId" => "2025team123",
             "teamName" => "對對隊",
             "workName" => "作品名稱",
-            "teamId" => "2025team1",
-            "workId" => "2025work1",
-        ],
-        [
-            "teamType" => "創意發想組",
-            "teamName" => "創意隊",
-            "workName" => "創意作品",
-            "teamId" => "2025team2",
-            "workId" => "2025work2",
-        ],
-    ],
+            "members" => [
+                [
+                    "name" => "陳小明",
+                    "department" => "資訊工程系",
+                ],
+                [
+                    "name" => "張三",
+                    "department" => "資訊工程系",
+                ],
+            ],
+        ]
+    ]
 ]);
 
 
