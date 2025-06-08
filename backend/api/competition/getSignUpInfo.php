@@ -43,6 +43,7 @@ $sql = "
         t.type AS teamType,
         t.uId AS teacherId,
         t.leader AS teamLeader,
+        IFNULL(t.rank, -1) AS teamRank,
         w.wId AS workId,
         w.name AS workName,
         w.abstract AS workAbstract,
@@ -177,7 +178,8 @@ $teamInfo = [
     "sdgs" => $row['sdgs'],
     "workIntroduction" => $row['workIntroduction'],
     "workConsent" => $row['workConsent'],
-    "workAffidavit" => $row['workAffidavit']
+    "workAffidavit" => $row['workAffidavit'],
+    "rank" => (int)$row['teamRank']
 ];
 
 echo json_encode([
