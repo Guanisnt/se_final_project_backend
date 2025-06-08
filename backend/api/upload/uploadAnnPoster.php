@@ -1,4 +1,11 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+header("Content-Type: application/json");
+
+require_once '../db_connect.php';
+
 $targetDir = "../uploadImage/annPosters/";
 if (!file_exists($targetDir)) {
     mkdir($targetDir, 0777, true);
@@ -11,17 +18,30 @@ if (isset($_FILES["file"])) {
     $targetFilePath = $targetDir . uniqid() . "_" . $fileName;
 
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)) {
-        $imageUrl = "http://se_final_project_backend.local:8081/api" . str_replace("../", "/", $targetFilePath);
-        echo json_encode([
-            "success" => true,
-            // "imgUrl" => $imageUrl,
-            // "aId" => $aId
-        ]);
+        // 組 posterUrl
+        $posterUrl = "http://se_final_project_backend.local:8081/api" . str_replace("../", "/", $targetFilePath);
+
+        // 插入 ann_posterurl
+        $stmt = $conn->prepare("INSERT INTO ann_posterurl (aId, posterUrl) VALUES (?, ?)");
+        $stmt->bind_param("ss", $aId, $posterUrl);
+
+        if ($stmt->execute()) {
+            echo json_encode([
+                "success" => true,
+                "aId" => $aId,
+                "posterUrl" => $posterUrl
+            ]);
+        } else {
+            echo json_encode(["success" => false, "error" => "資料庫寫入失敗：" . $stmt->error]);
+        }
+
+        $stmt->close();
     } else {
-        echo json_encode(["success" => false, "error" => "Upload failed."]);
+        echo json_encode(["success" => false, "error" => "檔案上傳失敗"]);
     }
 } else {
-    echo json_encode(["success" => false, "error" => "No file uploaded."]);
+    echo json_encode(["success" => false, "error" => "沒有檔案被上傳"]);
 }
 
-/* === 從這邊以下開始寫資料庫操作 === */
+$conn->close();
+?>

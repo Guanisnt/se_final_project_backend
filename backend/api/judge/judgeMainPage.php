@@ -11,29 +11,51 @@ if ($conn->connect_error) {
     exit;
 } 
 
-$page = isset($_GET['page']) ? $_GET['page'] : null;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 5;
+$offset = ($page - 1) * $limit;
 
-// 模擬回傳一筆公告資料
+$total_sql = "SELECT COUNT(*) AS total FROM team";
+$total_result = $conn->query($total_sql);
+$total_row = $total_result->fetch_assoc();
+$total_count = intval($total_row['total']);
+$totalPage = ceil($total_count / $limit);
+
+// 4️⃣ 查詢該頁面資料
+$sql = "
+    SELECT 
+        t.tId AS teamId,
+        t.name AS teamName,
+        t.type AS teamType,
+        w.name AS workName
+    FROM team t
+    LEFT JOIN work w ON t.tId = w.tId
+    ORDER BY t.tId ASC
+    LIMIT ? OFFSET ?
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $limit, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$data = [];
+while ($row = $result->fetch_assoc()) {
+    $data[] = [
+        "teamType" => $row['teamType'],
+        "teamName" => $row['teamName'],
+        "workName" => $row['workName'],
+        "teamId"   => $row['teamId']
+    ];
+}
+
+// 5️⃣ 回傳 JSON
 echo json_encode([
     "success" => true,
-    "page" => 1,
-    "totalPage" => 10,
-    "data" => [
-        [
-            "teamType" => "創意發想組",
-            "teamName" => "對對隊",
-            "workName" => "作品名稱",
-        ],
-        [
-            "teamType" => "創意發想組",
-            "teamName" => "創意隊",
-            "workName" => "創意作品",
-        ],
-    ],
+    "page" => $page,
+    "totalPage" => $totalPage,
+    "data" => $data
 ]);
 
-
-/* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
-
+$stmt->close();
 $conn->close();
 ?>

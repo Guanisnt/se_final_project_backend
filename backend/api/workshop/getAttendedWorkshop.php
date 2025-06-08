@@ -10,9 +10,9 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "error" => "資料庫連線失敗"]);
     exit;
 } 
-$wId = isset($_GET['uId']) ? intval($_GET['uId']) : null;
+$uId = isset($_GET['uId']) ? $_GET['uId'] : null;
 
-if (!$wId) {
+if (!$uId) {
     echo json_encode([
         "success" => false,
         "error" => "缺少 uId 參數"
@@ -21,13 +21,29 @@ if (!$wId) {
 }
 
 // 模擬回傳一筆公告資料
-echo json_encode([
-    "success" => true,
-    "workshopId" => [1, 2, 3],
-]);
+// echo json_encode([
+//     "success" => true,
+//     "workshopId" => [1, 2, 3]
+// ]);
 
 
 /* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
+$sql = "SELECT wsId FROM attend WHERE uId = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $uId);
+$stmt->execute();
+$result = $stmt->get_result();
 
+$workshopId = [];
+while ($row = $result->fetch_assoc()) {
+    $workshopId[] = (int) $row['wsId']; // 明確轉為 int，確保前端型別一致
+}
+
+echo json_encode([
+    "success" => true,
+    "workshopId" => $workshopId
+]);
+
+$stmt->close();
 $conn->close();
 ?>

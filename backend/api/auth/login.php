@@ -40,7 +40,6 @@ if ($row = $result->fetch_assoc()) { //是否有帳號
         echo json_encode([
             "success" => true,
             "userType" => $userType
-
         ]);
     } else { //密碼錯誤
         echo json_encode([

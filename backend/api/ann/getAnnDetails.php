@@ -70,7 +70,7 @@ if (isset($_GET['aId'])) {
     $stmt_ann->close();
 
     // 查詢檔案資料
-    $stmt_file = $conn->prepare("SELECT fileUrl, fileName FROM file WHERE aId = ?");
+    $stmt_file = $conn->prepare("SELECT fileUrl, fileName FROM ann_file WHERE aId = ?");
     $stmt_file->bind_param("i", $aId);
     $stmt_file->execute();
     $result_file = $stmt_file->get_result();

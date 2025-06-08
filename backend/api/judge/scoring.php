@@ -11,20 +11,33 @@ if ($conn->connect_error) {
     exit;
 }  
 
-$score = isset($input['score']) ? $input['score'] : null;
-$workId = isset($input['workId']) ? $input['workId'] : null;
-$judgeId = isset($input['judgeId']) ? $input['judgeId'] : null;
+if (!isset($input['score'], $input['judgeId'], $input['workId'])) {
+    echo json_encode(["success" => false, "error" => "缺少必要欄位"]);
+    exit;
+}
 
-// 模擬回傳一筆公告資料
-echo json_encode([
-    "success" => true,
-    "score" => $score,
-    "workId" => $workId,
-    "judgeId" => $judgeId,
-]);
+$score = $input['score'];
+$judgeId = $input['judgeId'];
+$workId = $input['workId'];
 
+// 新增分數資料
+$sql = "INSERT INTO score (score, uId, wId) VALUES (?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("iss", $score, $judgeId, $workId);
 
-/* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
+if ($stmt->execute()) {
+    echo json_encode([
+        "success" => true,
+        "score" => $score
+    ]);
+} else {
+    echo json_encode([
+        "success" => false,
+        "error" => "資料庫新增失敗"
+    ]);
+}
 
+$stmt->close();
 $conn->close();
 ?>
+

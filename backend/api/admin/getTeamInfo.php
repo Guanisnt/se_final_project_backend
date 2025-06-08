@@ -13,66 +13,158 @@ if ($conn->connect_error) {
 
 $teamId = isset($_GET['teamId']) ? $_GET['teamId'] : null;
 
+if (!$teamId) {
+    echo json_encode(["success" => false, "error" => "缺少 teamId"]);
+    exit;
+}
+
+// 查詢隊伍與作品資料
+$sql = "
+    SELECT 
+        t.tId AS teamId,
+        t.name AS teamName,
+        t.type AS teamType,
+        t.uId AS teacherId,
+        t.leader AS teamLeader,
+        w.wId AS workId,
+        w.name AS workName,
+        w.abstract AS workAbstract,
+        w.state AS workState,
+        w.sdgs,
+        IFNULL(w.introduction, '') AS workIntroduction,
+        IFNULL(w.consent, '') AS workConsent,
+        IFNULL(w.affidavit, '') AS workAffidavit
+    FROM team t
+    LEFT JOIN work w ON t.tId = w.tId
+    WHERE t.tId = ?
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $teamId);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo json_encode(["success" => false, "error" => "找不到該隊伍"]);
+    $stmt->close();
+    $conn->close();
+    exit;
+}
+
+$row = $result->fetch_assoc();
+$workId = $row['workId'];
+$teacherId = $row['teacherId'];
+$teamLeader = $row['teamLeader'];
+// 查詢作品網址
+$workUrls = [];
+if ($workId) {
+    $url_sql = "
+        SELECT url
+        FROM work_url
+        WHERE wId = ?
+    ";
+    $url_stmt = $conn->prepare($url_sql);
+    $url_stmt->bind_param("s", $workId);
+    $url_stmt->execute();
+    $url_result = $url_stmt->get_result();
+    while ($url_row = $url_result->fetch_assoc()) {
+        $workUrls[] = $url_row['url'];
+    }
+    $url_stmt->close();
+}
+
+// 查詢指導老師資料
+$advisorInfo = null;
+if ($teacherId) {
+    $advisor_sql = "
+        SELECT 
+            u.name AS name,
+            t.title,
+            t.department,
+            t.organization
+        FROM users u
+        JOIN teacher t ON u.uId = t.uId
+        WHERE u.uId = ?
+    ";
+    $advisor_stmt = $conn->prepare($advisor_sql);
+    $advisor_stmt->bind_param("s", $teacherId);
+    $advisor_stmt->execute();
+    $advisor_result = $advisor_stmt->get_result();
+    if ($advisor_result->num_rows > 0) {
+        $advisor_row = $advisor_result->fetch_assoc();
+        $advisorInfo = [
+            "name" => $advisor_row['name'],
+            "teacherInfo" => [
+                "title" => $advisor_row['title'],
+                "department" => $advisor_row['department'],
+                "organization" => $advisor_row['organization']
+            ]
+        ];
+    }
+    $advisor_stmt->close();
+}
+
+// 查詢隊伍所有組員
+$member_sql = "
+    SELECT 
+        a.uId,
+        u.name,
+        s.department,
+        s.grade,
+        u.email,
+        u.phone,
+        IFNULL(a.studentCard, '') AS studentCard
+    FROM attendee a
+    JOIN users u ON a.uId = u.uId
+    JOIN student s ON u.uId = s.uId
+    WHERE a.tId = ?
+";
+$member_stmt = $conn->prepare($member_sql);
+$member_stmt->bind_param("s", $teamId);
+$member_stmt->execute();
+$member_result = $member_stmt->get_result();
+
+$teamMembers = [];
+while ($member_row = $member_result->fetch_assoc()) {
+    $teamMembers[] = [
+        "uId" => $member_row['uId'],
+        "name" => $member_row['name'],
+        "department" => $member_row['department'],
+        "grade" => $member_row['grade'],
+        "email" => $member_row['email'],
+        "phone" => $member_row['phone'],
+        "studentCard" => $member_row['studentCard']
+    ];
+}
+$member_stmt->close();
+
+// 將隊長排第一個
+usort($teamMembers, function ($a, $b) use ($teamLeader) {
+    if ($a['uId'] === $teamLeader) return -1;
+    if ($b['uId'] === $teamLeader) return 1;
+    return 0;
+});
+
+$teamInfo = [
+    "workSate" => $row['workState'],
+    "teamName" => $row['teamName'],
+    "teamType" => $row['teamType'],
+    "workName" => $row['workName'],
+    "workAbstract" => $row['workAbstract'],
+    "workUrls" => $workUrls,
+    "sdgs" => $row['sdgs'],
+    "workIntroduction" => $row['workIntroduction'],
+    "workConsent" => $row['workConsent'],
+    "workAffidavit" => $row['workAffidavit']
+];
+
 echo json_encode([
     "success" => true,
-    "teamInfo" => [
-        "workSate" => "待上傳",
-        "teamName" => "對對隊",
-        "teamType" => "創意發想組",
-        "workName" => "作品名稱",
-        "workAbstract" => "作品摘要",
-        "workUrls" => [
-            "https://example.com/work1",
-            "https://example.com/work2"
-        ],
-        "sdgs" => "1, 2",
-        "workIntroduction" => "作品說明書檔案路徑",
-        "workConsent" => "個資同意書檔案路徑",
-        "workAffidavit" => "提案切結書檔案路徑",
-    ],
-    "advisorInfo" => [
-        "name" => "陳老師",
-        "teacherInfo" => [
-            "title" => "指導老師",
-            "department" => "資訊工程系",
-            "organization" => "高雄大學",
-        ]
-    ],
-    "memberInfo" => [
-        [
-            "uId" => "a1115555",
-            "name" => "陳小明",
-            "email" => "a1115555@gmail.com",
-            "phone" => "0912345678",
-            "studentInfo" => [
-                "department" => "資訊工程系",
-                "grade" => "大一"
-            ],
-            "attendeeInfo" => [
-                "studentCard" => "student_card_path_1.jpg",
-                "teamId" => "2025team123",
-                "workId" => "2025work456"
-            ]
-        ],
-        [
-            "uId" => "a1115566",
-            "name" => "張三",
-            "email" => "a1115566@gmail.com",
-            "phone" => "0912345678",
-            "studentInfo" => [
-                "department" => "資訊工程系",
-                "grade" => "大三"
-            ],
-            "attendeeInfo" => [
-                "studentCard" => "student_card_path_2.jpg",
-                "teamId" => "2025team123",
-                "workId" => "2025work456"
-            ]
-        ],
-    ]
+    "teamInfo" => $teamInfo,
+    "advisorInfo" => $advisorInfo,
+    "totalMembers" => count($teamMembers),
+    "teamMembers" => $teamMembers
 ]);
 
-/* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
-
+$stmt->close();
 $conn->close();
 ?>
