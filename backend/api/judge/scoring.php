@@ -23,7 +23,7 @@ $workId = $input['workId'];
 // 新增分數資料
 $sql = "INSERT INTO score (score, uId, wId) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iss", $score, $judgeId, $workId);
+$stmt->bind_param("dss", $score, $judgeId, $workId);
 
 if ($stmt->execute()) {
     echo json_encode([
