@@ -131,14 +131,22 @@ try {
         }
     }
 
-    // 插入 attendee 表
+    // 插入 attendee 並更新 users.userType
     $insertAttendeeSql = "INSERT INTO attendee (tId, uId, wId) VALUES (?, ?, ?)";
     $insertAttendeeStmt = $conn->prepare($insertAttendeeSql);
+
+    $updateUserTypeSql = "UPDATE users SET userType = 'attendee' WHERE uId = ?";
+    $updateUserTypeStmt = $conn->prepare($updateUserTypeSql);
 
     foreach ($teamMembers as $uId) {
         $insertAttendeeStmt->bind_param("sss", $newTeamId, $uId, $newWorkId);
         if (!$insertAttendeeStmt->execute()) {
             throw new Exception("新增隊員失敗：" . $uId);
+        }
+
+        $updateUserTypeStmt->bind_param("s", $uId);
+        if (!$updateUserTypeStmt->execute()) {
+            throw new Exception("更新 userType 失敗：" . $uId);
         }
     }
 
