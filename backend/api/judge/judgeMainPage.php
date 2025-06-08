@@ -27,6 +27,7 @@ $sql = "
         t.tId AS teamId,
         t.name AS teamName,
         t.type AS teamType,
+        w.wId AS workId,
         w.name AS workName,
         IFNULL(ROUND(AVG(s.score), 2), -1) AS score
     FROM team t
@@ -46,6 +47,7 @@ while ($row = $result->fetch_assoc()) {
     $data[] = [
         "teamType" => $row['teamType'],
         "teamName" => $row['teamName'],
+        "workId"   => $row['workId'],
         "workName" => $row['workName'],
         "teamId"   => $row['teamId'],
         "score"    => $row['score']
