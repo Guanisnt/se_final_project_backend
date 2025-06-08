@@ -27,9 +27,12 @@ $sql = "
         t.tId AS teamId,
         t.name AS teamName,
         t.type AS teamType,
-        w.name AS workName
+        w.name AS workName,
+        IFNULL(ROUND(AVG(s.score), 2), -1) AS score
     FROM team t
     LEFT JOIN work w ON t.tId = w.tId
+    LEFT JOIN score s ON w.wId = s.wId
+    GROUP BY t.tId, w.wId
     ORDER BY t.tId ASC
     LIMIT ? OFFSET ?
 ";
@@ -44,7 +47,8 @@ while ($row = $result->fetch_assoc()) {
         "teamType" => $row['teamType'],
         "teamName" => $row['teamName'],
         "workName" => $row['workName'],
-        "teamId"   => $row['teamId']
+        "teamId"   => $row['teamId'],
+        "score"    => $row['score']
     ];
 }
 
