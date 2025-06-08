@@ -42,8 +42,11 @@ foreach ($uploadConfig as $field => $dir) {
         $targetFilePath = $dir . $uniqueName;
 
         if (move_uploaded_file($_FILES[$field]['tmp_name'], $targetFilePath)) {
+            // 檔案成功上傳，組成檔案 URL
+            $fileUrl = "http://se_final_project_backend.local:8081/api" . str_replace("../", "/", $targetFilePath);
+            
             // 更新欄位準備
-            $updateFields[$field] = $targetFilePath;
+            $updateFields[$field] = $fileUrl;
 
             $results[$field] = [
                 'success' => true
