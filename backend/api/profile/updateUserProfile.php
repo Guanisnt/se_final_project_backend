@@ -11,6 +11,7 @@ if ($conn->connect_error) {
     exit;
 } 
 
+$uId = isset($_GET['uId']) ? $_GET['uId'] : null;
 $name = isset($input['name']) ? $input['name'] : null;
 $email = isset($input['email']) ? $input['email'] : null;
 $phone = isset($input['phone']) ? $input['phone'] : null;
