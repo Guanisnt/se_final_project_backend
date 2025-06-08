@@ -11,28 +11,90 @@ if ($conn->connect_error) {
     exit;
 } 
 
-// 模擬回傳一筆公告資料
-echo json_encode([
-    "success" => true,
-    "userManage" => [
-        "totalUser" => 1900,
-        "stuAmount" => 1100,
-        "attendeeAmount" => 200,
-        "techerAmount" => 500,
-        "lecturerAmount" => 100,
-        "judgeAmount" => 200,
-    ],
-    "workState" => [
-        "totalTeam" => 1900,
-        "accepted" => 1100,
-        "pending" => 120,
-        "supplementary" => 500,
-        "notUploadYet" => 80,
-    ]
-]);
+try {
+    // 直接從 users 表取得總人數
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM users");
+    $stmt->execute();
+    $stmt->bind_result($totalUser);
+    $stmt->fetch();
+    $stmt->close();
 
+    // 各角色數量
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM student");
+    $stmt->execute();
+    $stmt->bind_result($stuAmount);
+    $stmt->fetch();
+    $stmt->close();
 
-/* === 從這邊以下開始寫資料庫操作，上面我測試API用的誤刪 === */
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM attendee");
+    $stmt->execute();
+    $stmt->bind_result($attendeeAmount);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM teacher");
+    $stmt->execute();
+    $stmt->bind_result($teacherAmount);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM lecturer");
+    $stmt->execute();
+    $stmt->bind_result($lecturerAmount);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM judge");
+    $stmt->execute();
+    $stmt->bind_result($judgeAmount);
+    $stmt->fetch();
+    $stmt->close();
+
+    // 查詢作品狀態數量
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM team");
+    $stmt->execute();
+    $stmt->bind_result($totalTeam);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM work WHERE state = '已審核'");
+    $stmt->execute();
+    $stmt->bind_result($accepted);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM work WHERE state = '待審核'");
+    $stmt->execute();
+    $stmt->bind_result($pending);
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM work WHERE state = '需補件'");
+    $stmt->execute();
+    $stmt->bind_result($supplementary);
+    $stmt->fetch();
+    $stmt->close();
+
+    echo json_encode([
+        "success" => true,
+        "userManage" => [
+            "totalUser" => $totalUser,
+            "stuAmount" => $stuAmount,
+            "attendeeAmount" => $attendeeAmount,
+            "techerAmount" => $teacherAmount,
+            "lecturerAmount" => $lecturerAmount,
+            "judgeAmount" => $judgeAmount
+        ],
+        "workState" => [
+            "totalTeam" => $totalTeam,
+            "accepted" => $accepted,
+            "pending" => $pending,
+            "supplementary" => $supplementary,
+        ]
+    ]);
+} catch (Exception $e) {
+    echo json_encode(["success" => false, "error" => "查詢失敗: " . $e->getMessage()]);
+}
 
 $conn->close();
 ?>

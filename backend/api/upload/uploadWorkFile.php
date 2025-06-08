@@ -4,6 +4,8 @@ header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header("Content-Type: application/json");
 
+require_once '../db_connect.php';
+
 // 1. 設定各檔案對應的資料夾
 $uploadConfig = [
     'affidavit'     => '../uploadFiles/affidavits/',
@@ -18,8 +20,21 @@ foreach ($uploadConfig as $key => $dir) {
     }
 }
 
-// 3. 處理上傳，結果暫存在 $results
+// 3. 檢查必要參數
+$workId = isset($_POST['workId']) ? $_POST['workId'] : null;
+
+if (!$workId) {
+    echo json_encode([
+        'success' => false,
+        'error' => '缺少 workId'
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+// 4. 處理上傳，結果暫存在 $results
 $results = [];
+$updateFields = [];
+
 foreach ($uploadConfig as $field => $dir) {
     if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
         $fileName       = basename($_FILES[$field]['name']);
@@ -27,10 +42,11 @@ foreach ($uploadConfig as $field => $dir) {
         $targetFilePath = $dir . $uniqueName;
 
         if (move_uploaded_file($_FILES[$field]['tmp_name'], $targetFilePath)) {
+            // 更新欄位準備
+            $updateFields[$field] = $targetFilePath;
+
             $results[$field] = [
-                'success' => true,
-                // 'url'     => 'http://se_final_project_backend.local:8081/api' 
-                //              . str_replace('../', '/', $targetFilePath)
+                'success' => true
             ];
         } else {
             $results[$field] = [
@@ -46,11 +62,44 @@ foreach ($uploadConfig as $field => $dir) {
     }
 }
 
-// 4. 一次輸出所有結果
+// 5. 更新資料庫
+if (!empty($updateFields)) {
+    // 準備動態更新欄位
+    $setStr = '';
+    $params = [];
+    $types = '';
+    foreach ($updateFields as $field => $filePath) {
+        $setStr .= "$field = ?, ";
+        $params[] = $filePath;
+        $types .= 's';
+    }
+
+    // 移除最後的逗號
+    $setStr = rtrim($setStr, ', ');
+
+    // 條件
+    $params[] = $workId;
+    $types .= 's';
+
+    $sql = "UPDATE work SET $setStr WHERE wId = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param($types, ...$params);
+
+    if (!$stmt->execute()) {
+        echo json_encode([
+            'success' => false,
+            'error' => '資料庫更新失敗'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    $stmt->close();
+}
+
 echo json_encode([
     'success' => true,
     'files'   => $results
-], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+], JSON_UNESCAPED_UNICODE);
 
-/* === 從這邊以下開始寫資料庫操作 === */
+$conn->close();
 ?>

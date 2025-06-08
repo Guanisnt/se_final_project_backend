@@ -40,4 +40,3 @@ if ($stmt->execute()) {
     echo json_encode(["success" => false, "error" => "新增公告失敗"]);
 }
 ?>
-?>

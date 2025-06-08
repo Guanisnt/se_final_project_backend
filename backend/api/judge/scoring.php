@@ -9,35 +9,35 @@ require_once '../db_connect.php';
 if ($conn->connect_error) {
     echo json_encode(["success" => false, "error" => "資料庫連線失敗"]);
     exit;
-} 
+}  
 
-$uId = isset($_GET['uId']) ? $_GET['uId'] : null;
-
-if (!$uId) {
-    echo json_encode(["success" => false, "error" => "缺少 uId 參數"]);
+if (!isset($input['score'], $input['judgeId'], $input['workId'])) {
+    echo json_encode(["success" => false, "error" => "缺少必要欄位"]);
     exit;
 }
 
-// 根據 uId 查詢對應使用者
-$sql = "SELECT name FROM users WHERE uId = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $uId);
-$stmt->execute();
-$result = $stmt->get_result();
+$score = $input['score'];
+$judgeId = $input['judgeId'];
+$workId = $input['workId'];
 
-if ($row = $result->fetch_assoc()) {
+// 新增分數資料
+$sql = "INSERT INTO score (score, uId, wId) VALUES (?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("dss", $score, $judgeId, $workId);
+
+if ($stmt->execute()) {
     echo json_encode([
         "success" => true,
-        "name" => $row['name'],
-        "uId" => $uId
+        "score" => $score
     ]);
 } else {
     echo json_encode([
         "success" => false,
-        "error" => "查無使用者"
+        "error" => "資料庫新增失敗"
     ]);
 }
 
 $stmt->close();
 $conn->close();
 ?>
+

@@ -112,19 +112,8 @@ try {
         throw new Exception("新增隊伍失敗");
     }
 
-    // 插入 attendee 表
-    $insertAttendeeSql = "INSERT INTO attendee (tId, uId) VALUES (?, ?)";
-    $insertAttendeeStmt = $conn->prepare($insertAttendeeSql);
-
-    foreach ($teamMembers as $uId) {
-        $insertAttendeeStmt->bind_param("ss", $newTeamId, $uId);
-        if (!$insertAttendeeStmt->execute()) {
-            throw new Exception("新增隊員失敗：" . $uId);
-        }
-    }
-    
     // 插入 work
-    $workState = "待上傳";
+    $workState = "待審核";
     $insertWorkSql = "INSERT INTO work (wId, name, sdgs, state, abstract, tId) VALUES (?, ?, ?, ?, ?, ?)";
     $insertWorkStmt = $conn->prepare($insertWorkSql);
     $insertWorkStmt->bind_param("ssssss", $newWorkId, $workName, $sdgs, $workState, $workAbstract, $newTeamId);
@@ -139,6 +128,25 @@ try {
         $insertUrlStmt->bind_param("ss", $newWorkId, $url);
         if (!$insertUrlStmt->execute()) {
             throw new Exception("新增作品網址失敗");
+        }
+    }
+
+    // 插入 attendee 並更新 users.userType
+    $insertAttendeeSql = "INSERT INTO attendee (tId, uId, wId) VALUES (?, ?, ?)";
+    $insertAttendeeStmt = $conn->prepare($insertAttendeeSql);
+
+    $updateUserTypeSql = "UPDATE users SET userType = 'attendee' WHERE uId = ?";
+    $updateUserTypeStmt = $conn->prepare($updateUserTypeSql);
+
+    foreach ($teamMembers as $uId) {
+        $insertAttendeeStmt->bind_param("sss", $newTeamId, $uId, $newWorkId);
+        if (!$insertAttendeeStmt->execute()) {
+            throw new Exception("新增隊員失敗：" . $uId);
+        }
+
+        $updateUserTypeStmt->bind_param("s", $uId);
+        if (!$updateUserTypeStmt->execute()) {
+            throw new Exception("更新 userType 失敗：" . $uId);
         }
     }
 

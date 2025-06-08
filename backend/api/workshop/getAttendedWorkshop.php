@@ -39,17 +39,10 @@ while ($row = $result->fetch_assoc()) {
     $workshopId[] = (int) $row['wsId']; // 明確轉為 int，確保前端型別一致
 }
 
-if (!empty($workshopId)) {
-    echo json_encode([
-        "success" => true,
-        "workshopId" => $workshopId
-    ]);
-} else {
-    echo json_encode([
-        "success" => false,
-        "error" => "無報名任何工作坊"
-    ]);
-}
+echo json_encode([
+    "success" => true,
+    "workshopId" => $workshopId
+]);
 
 $stmt->close();
 $conn->close();

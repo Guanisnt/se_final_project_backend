@@ -13,10 +13,26 @@ if ($conn->connect_error) {
 $aId = isset($_GET['aId']) ? intval($_GET['aId']) : null;
 $posterUrl= isset($_GET['posterUrl']) ? $_GET['posterUrl'] : null;
 
-echo json_encode([
-    "success" => true,
-    // "aId" => $aId,
-    // "posterUrl" => $posterUrl,
-]);
-/* === 從這邊以下開始寫資料庫操作 === */
+if (!$aId || !$posterUrl) {
+    echo json_encode(["success" => false, "error" => "缺少必要參數"]);
+    exit;
+}
+
+// 刪除對應資料
+$sql = "DELETE FROM ann_posterurl WHERE aId = ? AND posterUrl = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $aId, $posterUrl);
+
+if ($stmt->execute()) {
+    if ($stmt->affected_rows > 0) {
+        echo json_encode(["success" => true]);
+    } else {
+        echo json_encode(["success" => false, "error" => "找不到對應資料"]);
+    }
+} else {
+    echo json_encode(["success" => false, "error" => "刪除失敗"]);
+}
+
+$stmt->close();
+$conn->close();
 ?>
