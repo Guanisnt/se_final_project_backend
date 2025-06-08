@@ -24,7 +24,7 @@ if (isset($_FILES["file"])) {
         // 插入 ann_file
         $insertSql = "INSERT INTO ann_file (fileName, fileUrl, aId) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($insertSql);
-        $stmt->bind_param("sss", $fileName, $fileUrl, $aId);
+        $stmt->bind_param("ssi", $fileName, $fileUrl, $aId);
 
         if ($stmt->execute()) {
             echo json_encode([
