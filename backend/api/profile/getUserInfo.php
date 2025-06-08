@@ -94,17 +94,22 @@ switch ($user["userType"]) {
         break;
 
     case "attendee":
-        $stmt = $conn->prepare("SELECT tId, wId, studentCard 
-                                FROM attendee 
-                                WHERE uId = ?");
+        $stmt = $conn->prepare("SELECT a.tId, a.wId, a.studentCard, s.department, s.grade 
+                                FROM attendee a 
+                                JOIN student s ON a.uId = s.uId 
+                                WHERE a.uId = ?");
         $stmt->bind_param("s", $uId);
         $stmt->execute();
-        $stmt->bind_result($tId, $wId, $studentCard);
+        $stmt->bind_result($tId, $wId, $studentCard, $department, $grade);
         if ($stmt->fetch()) {
             $response["attendeeInfo"] = [
                 "studentCard" => $studentCard,
                 "teamId" => $tId,
                 "workId" => $wId
+            ];
+            $response["studentInfo"] = [
+                "department" => $department,
+                "grade" => $grade
             ];
         }
         break;
