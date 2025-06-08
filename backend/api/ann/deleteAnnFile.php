@@ -22,14 +22,10 @@ if (!$aId || !$fileName || !$fileUrl) {
 // 刪除對應資料
 $sql = "DELETE FROM ann_file WHERE aId = ? AND fileName = ? AND fileUrl = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $aId, $fileName, $fileUrl);
+$stmt->bind_param("iss", $aId, $fileName, $fileUrl);
 
 if ($stmt->execute()) {
-    if ($stmt->affected_rows > 0) {
-        echo json_encode(["success" => true]);
-    } else {
-        echo json_encode(["success" => false, "error" => "找不到對應資料"]);
-    }
+    echo json_encode(["success" => true]);
 } else {
     echo json_encode(["success" => false, "error" => "刪除失敗"]);
 }
