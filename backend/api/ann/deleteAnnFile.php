@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 
 $aId = isset($_GET['aId']) ? intval($_GET['aId']) : null;
 $fileName= isset($_GET['fileName']) ? $_GET['fileName'] : null;
-$fileUrl= isset($_GET['fileUrl']) ? $_GET['fileUrl'] : null;
+$fileUrl= isset($_GET['fileUrl']) ? urldecode($_GET['fileUrl']) : null;
 
 if (!$aId || !$fileName || !$fileUrl) {
     echo json_encode(["success" => false, "error" => "缺少必要參數"]);
