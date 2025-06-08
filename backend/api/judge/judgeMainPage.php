@@ -15,7 +15,7 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
 $offset = ($page - 1) * $limit;
 
-$total_sql = "SELECT COUNT(*) AS total FROM team";
+$total_sql = "SELECT COUNT(*) AS total FROM team t LEFT JOIN work w ON t.tId = w.tId WHERE w.state = '已審核'";
 $total_result = $conn->query($total_sql);
 $total_row = $total_result->fetch_assoc();
 $total_count = intval($total_row['total']);
@@ -33,6 +33,7 @@ $sql = "
     FROM team t
     LEFT JOIN work w ON t.tId = w.tId
     LEFT JOIN score s ON w.wId = s.wId
+    WHERE w.state = '已審核'
     GROUP BY t.tId, w.wId
     ORDER BY t.tId ASC
     LIMIT ? OFFSET ?
