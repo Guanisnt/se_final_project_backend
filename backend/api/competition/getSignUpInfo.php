@@ -145,11 +145,17 @@ while ($member_row = $member_result->fetch_assoc()) {
     $teamMembers[] = [
         "uId" => $member_row['uId'],
         "name" => $member_row['name'],
-        "department" => $member_row['department'],
-        "grade" => $member_row['grade'],
         "email" => $member_row['email'],
         "phone" => $member_row['phone'],
-        "studentCard" => $member_row['studentCard']
+        "studentInfo" => [
+            "department" => $member_row['department'],
+            "grade" => $member_row['grade']
+        ],
+        "attendeeInfo" => [
+            "studentCard" => $member_row['studentCard'],
+            "teamId" => $teamId,
+            "workId" => $workId
+        ]
     ];
 }
 $member_stmt->close();
@@ -179,7 +185,7 @@ echo json_encode([
     "teamInfo" => $teamInfo,
     "advisorInfo" => $advisorInfo,
     "totalMembers" => count($teamMembers),
-    "teamMembers" => $teamMembers
+    "memberInfo" => $teamMembers
 ]);
 
 $stmt->close();
