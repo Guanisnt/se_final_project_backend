@@ -12,5 +12,41 @@ if ($conn->connect_error) {
 
 $workId = isset($_GET['workId']) ? $_GET['workId'] : null;
 
+if (!$workId) {
+    echo json_encode(["success" => false, "error" => "缺少 workId 參數"]);
+    exit;
+}
+
+// 更新 work 資料表，將 consent 設為 NULL
+$sql = "UPDATE work SET consent = NULL WHERE wId = ?";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo json_encode(["success" => false, "error" => "SQL預備失敗: " . $conn->error]);
+    exit;
+}
+
+$stmt->bind_param("s", $workId);
+
+if ($stmt->execute()) {
+    if ($stmt->affected_rows > 0) {
+        echo json_encode([
+            "success" => true,
+            "message" => "個資同意書刪除成功"
+        ]);
+    } else {
+        echo json_encode([
+            "success" => false,
+            "error" => "找不到對應的作品或個資同意書已不存在"
+        ]);
+    }
+} else {
+    echo json_encode([
+        "success" => false,
+        "error" => "刪除失敗: " . $stmt->error
+    ]);
+}
+
+$stmt->close();
 $conn->close();
 ?>
