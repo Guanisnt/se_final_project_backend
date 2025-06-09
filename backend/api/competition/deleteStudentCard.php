@@ -29,22 +29,7 @@ if (!$stmt) {
 $stmt->bind_param("s", $uId);
 
 if ($stmt->execute()) {
-    if ($stmt->affected_rows > 0) {
-        echo json_encode([
-            "success" => true,
-            "message" => "學生證刪除成功"
-        ]);
-    } else {
-        echo json_encode([
-            "success" => false,
-            "error" => "找不到對應的使用者或學生證已不存在"
-        ]);
-    }
-} else {
-    echo json_encode([
-        "success" => false,
-        "error" => "刪除失敗: " . $stmt->error
-    ]);
+    echo json_encode(["success" => true]);
 }
 
 $stmt->close();

@@ -50,10 +50,10 @@ try {
         throw new Exception("更新 work 失敗: " . $update_work_stmt->error);
     }
     
-    // 檢查是否有更新到資料
-    if ($update_work_stmt->affected_rows === 0) {
-        throw new Exception("找不到對應的作品資料");
-    }
+    // // 檢查是否有更新到資料
+    // if ($update_work_stmt->affected_rows === 0) {
+    //     throw new Exception("找不到對應的作品資料");
+    // }
     
     $update_work_stmt->close();
     
