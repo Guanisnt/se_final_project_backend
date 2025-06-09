@@ -51,7 +51,8 @@ $sql = "
         w.sdgs,
         IFNULL(w.introduction, '') AS workIntroduction,
         IFNULL(w.consent, '') AS workConsent,
-        IFNULL(w.affidavit, '') AS workAffidavit
+        IFNULL(w.affidavit, '') AS workAffidavit,
+        IFNULL(w.message, '') AS workMessage
     FROM team t
     LEFT JOIN work w ON t.tId = w.tId
     WHERE t.tId = ?
@@ -179,7 +180,8 @@ $teamInfo = [
     "workIntroduction" => $row['workIntroduction'],
     "workConsent" => $row['workConsent'],
     "workAffidavit" => $row['workAffidavit'],
-    "rank" => (int)$row['teamRank']
+    "rank" => (int)$row['teamRank'],
+    "workMessage" => $row['workMessage']
 ];
 
 echo json_encode([
