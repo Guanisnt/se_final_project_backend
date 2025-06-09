@@ -44,9 +44,12 @@ if (!$year || !$teamType) {
 }
 
 // 預備 SQL 查詢
-$sql = "SELECT w.wId, t.rank, t.name as teamName, w.name as workName, t.uId as advisor
+$sql = "SELECT w.wId, t.tId, t.rank, t.name as teamName, w.name as workName, 
+               CONCAT(u.name, ' ', IFNULL(te.title, '')) as advisor
         FROM work w
         JOIN team t ON w.tId = t.tId
+        LEFT JOIN users u ON t.uId = u.uId
+        LEFT JOIN teacher te ON t.uId = te.uId
         WHERE w.wId LIKE ? AND t.type = ?";
 
 $stmt = $conn->prepare($sql);
@@ -67,6 +70,7 @@ $data = [];
 while ($row = $result->fetch_assoc()) {
     $data[] = [
         "workId" => $row["wId"],
+        "teamId" => $row["tId"],
         "teamRank" => $row["rank"],
         "teamName" => $row["teamName"],
         "workName" => $row["workName"],

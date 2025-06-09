@@ -177,7 +177,8 @@ try {
                 $table = "lecture";
                 break;
             default:
-                throw new Exception("未知的使用者類型");
+                break;
+                // throw new Exception("未知的使用者類型");
         }
 
         if (!empty($updateRoleFields)) {

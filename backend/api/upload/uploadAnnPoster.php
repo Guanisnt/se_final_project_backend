@@ -23,7 +23,7 @@ if (isset($_FILES["file"])) {
 
         // 插入 ann_posterurl
         $stmt = $conn->prepare("INSERT INTO ann_posterurl (aId, posterUrl) VALUES (?, ?)");
-        $stmt->bind_param("ss", $aId, $posterUrl);
+        $stmt->bind_param("is", $aId, $posterUrl);
 
         if ($stmt->execute()) {
             echo json_encode([

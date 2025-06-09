@@ -38,11 +38,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("sssss", $annTitle, $annContent, $publishDate, $uId, $aId);
 
 if ($stmt->execute()) {
-    if ($stmt->affected_rows > 0) {
-        echo json_encode(["success" => true]);
-    } else {
-        echo json_encode(["success" => false, "error" => "沒有修改任何資料"]);
-    }
+    echo json_encode(["success" => true]);
 } else {
     echo json_encode(["success" => false, "error" => "更新失敗"]);
 }

@@ -43,6 +43,7 @@ $sql = "
         t.type AS teamType,
         t.uId AS teacherId,
         t.leader AS teamLeader,
+        IFNULL(t.rank, -1) AS teamRank,
         w.wId AS workId,
         w.name AS workName,
         w.abstract AS workAbstract,
@@ -50,7 +51,8 @@ $sql = "
         w.sdgs,
         IFNULL(w.introduction, '') AS workIntroduction,
         IFNULL(w.consent, '') AS workConsent,
-        IFNULL(w.affidavit, '') AS workAffidavit
+        IFNULL(w.affidavit, '') AS workAffidavit,
+        IFNULL(w.message, '') AS workMessage
     FROM team t
     LEFT JOIN work w ON t.tId = w.tId
     WHERE t.tId = ?
@@ -145,11 +147,17 @@ while ($member_row = $member_result->fetch_assoc()) {
     $teamMembers[] = [
         "uId" => $member_row['uId'],
         "name" => $member_row['name'],
-        "department" => $member_row['department'],
-        "grade" => $member_row['grade'],
         "email" => $member_row['email'],
         "phone" => $member_row['phone'],
-        "studentCard" => $member_row['studentCard']
+        "studentInfo" => [
+            "department" => $member_row['department'],
+            "grade" => $member_row['grade']
+        ],
+        "attendeeInfo" => [
+            "studentCard" => $member_row['studentCard'],
+            "teamId" => $teamId,
+            "workId" => $workId
+        ]
     ];
 }
 $member_stmt->close();
@@ -162,7 +170,7 @@ usort($teamMembers, function ($a, $b) use ($teamLeader) {
 });
 
 $teamInfo = [
-    "workSate" => $row['workState'],
+    "workState" => $row['workState'],
     "teamName" => $row['teamName'],
     "teamType" => $row['teamType'],
     "workName" => $row['workName'],
@@ -171,7 +179,9 @@ $teamInfo = [
     "sdgs" => $row['sdgs'],
     "workIntroduction" => $row['workIntroduction'],
     "workConsent" => $row['workConsent'],
-    "workAffidavit" => $row['workAffidavit']
+    "workAffidavit" => $row['workAffidavit'],
+    "rank" => (int)$row['teamRank'],
+    "workMessage" => $row['workMessage']
 ];
 
 echo json_encode([
@@ -179,7 +189,7 @@ echo json_encode([
     "teamInfo" => $teamInfo,
     "advisorInfo" => $advisorInfo,
     "totalMembers" => count($teamMembers),
-    "teamMembers" => $teamMembers
+    "memberInfo" => $teamMembers
 ]);
 
 $stmt->close();
