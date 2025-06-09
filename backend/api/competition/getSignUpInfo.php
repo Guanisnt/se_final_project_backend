@@ -52,10 +52,13 @@ $sql = "
         IFNULL(w.introduction, '') AS workIntroduction,
         IFNULL(w.consent, '') AS workConsent,
         IFNULL(w.affidavit, '') AS workAffidavit,
-        IFNULL(w.message, '') AS workMessage
+        IFNULL(w.message, '') AS workMessage,
+        IFNULL(ROUND(AVG(s.score), 2), -1) AS workScore
     FROM team t
     LEFT JOIN work w ON t.tId = w.tId
+    LEFT JOIN score s ON w.wId = s.wId
     WHERE t.tId = ?
+    GROUP BY t.tId, w.wId
 ";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $teamId);
@@ -181,7 +184,8 @@ $teamInfo = [
     "workConsent" => $row['workConsent'],
     "workAffidavit" => $row['workAffidavit'],
     "rank" => (int)$row['teamRank'],
-    "workMessage" => $row['workMessage']
+    "workMessage" => $row['workMessage'],
+    "score" => (float)$row['workScore']
 ];
 
 echo json_encode([
