@@ -170,7 +170,7 @@ usort($teamMembers, function ($a, $b) use ($teamLeader) {
 });
 
 $teamInfo = [
-    "workSate" => $row['workState'],
+    "workState" => $row['workState'],
     "teamName" => $row['teamName'],
     "teamType" => $row['teamType'],
     "workName" => $row['workName'],
