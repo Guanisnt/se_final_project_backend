@@ -14,6 +14,7 @@ if ($conn->connect_error) {
 
 $teamId = $input['teamId'] ?? null;
 $state = $input['state'] ?? null;
+$message = $input['message'] ?? null;
 
 if (!$teamId || !$state) {
     echo json_encode([
@@ -22,9 +23,15 @@ if (!$teamId || !$state) {
     ]);
     exit;
 }
-$sql = "UPDATE work SET state = ? WHERE tId = ?";
+
+// 如果狀態不是"需補件"，將message設為null
+if ($state !== "需補件") {
+    $message = null;
+}
+
+$sql = "UPDATE work SET state = ?, message = ? WHERE tId = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $state, $teamId);
+$stmt->bind_param("sss", $state, $message, $teamId);
 
 if ($stmt->execute()) {
     echo json_encode(["success" => true]);
